@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 
-import 'add_training.dart';
+import 'add_workout.dart';
 
 void main(){
   runApp(MyApp());
@@ -77,14 +77,14 @@ class MyHomePage extends StatelessWidget{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to the AddTrainingForm page
+          // Navigate to the AddingWorkoutForm page
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddTrainingForm()),
+            MaterialPageRoute(builder: (context) => AddWorkoutForm()),
           );
         },
         backgroundColor: Colors.purpleAccent,
-        tooltip: 'Add Today\'s Training', // Tooltip for the FAB
+        tooltip: 'Add Today\'s Workout', // Tooltip for the FAB
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
