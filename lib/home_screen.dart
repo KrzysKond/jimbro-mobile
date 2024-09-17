@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:jimbro_mobile/auth_service.dart';
 import 'package:jimbro_mobile/routes.dart';
 import 'add_workout.dart';
 
@@ -8,8 +9,27 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("JIMBRO", style: TextStyle(color: Colors.white, fontSize: 30, letterSpacing: 2),)),
+        title: const Text("JIMBRO", style: TextStyle(color: Colors.white, fontSize: 30, letterSpacing: 2),),
         backgroundColor: Colors.purpleAccent,
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () async{
+                try{
+                  await AuthService().logout();
+                }
+                catch(e){
+                  print(e);
+                }
+                Navigator.pushNamedAndRemoveUntil(context, '/splash', (Route<dynamic> route) => false);
+              },
+              icon: const Icon((Icons.logout_outlined),
+                size: 40,
+                color: Colors.white70,
+              ),
+          ),
+        ],
+        
       ),
       body: Center(
         child: Padding(

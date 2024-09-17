@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'routes.dart'; // Import the routes file
+import 'routes.dart'; // Import routes file
 
 void main() {
   runApp(MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(color: Colors.white),
         ),
       ),
-      initialRoute: Routes.home,
+      initialRoute: Routes.splash, // Set initial route to splash screen
       routes: Routes.routes,
     );
   }
