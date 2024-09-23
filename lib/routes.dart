@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:jimbro_mobile/screens/group_screen.dart';
 import 'package:jimbro_mobile/splash.dart';
-import 'login_screen.dart';
+import 'auth_screens/login_screen.dart';
 import 'main.dart';
-import 'signup_screen.dart';
+import 'auth_screens/signup_screen.dart';
 import 'add_workout.dart';
-import 'home_screen.dart';
-import 'auth_service.dart';
-import 'splash.dart'; // Import splash screen
+import 'screens/home_screen.dart';
+import 'service/auth_service.dart';
+import 'splash.dart';
 
 class Routes {
   static const String splash = '/splash';
@@ -14,14 +15,17 @@ class Routes {
   static const String login = '/login';
   static const String signup = '/signup';
   static const String addWorkout = '/addWorkout';
+  static const String group = '/group';
 
   static Map<String, WidgetBuilder> get routes {
     return {
       splash: (context) => SplashScreen(),
       home: (context) => MyHomePage(),
-      login: (context) => LoginScreen(),
-      signup: (context) => SignupScreen(),
+      login: (context) => const LoginScreen(),
+      signup: (context) => const SignupScreen(),
       addWorkout: (context) => const AddWorkoutForm(),
+      group: (context) => GroupScreen()
+
     };
   }
 }

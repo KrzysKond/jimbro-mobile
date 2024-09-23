@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'auth_service.dart';
+import '../service/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  LoginScreen({super.key});
-
+  String? _errorText; //TODO :: Add specific feedbacks
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -75,22 +81,37 @@ class LoginScreen extends StatelessWidget {
                         obscureText: true,
                       ),
                     ),
-                    SizedBox(height:padding),
 
+
+                    if (_errorText != null)
+                      Text(
+                        _errorText!,
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    SizedBox(height:padding),
                     SizedBox(
                       height: buttonHeight,
                       child: ElevatedButton(
                         onPressed: () async {
+                          setState(() {
+                          _errorText = null;
+                          });
                           try {
-                            await AuthService().login(
+                            if(await AuthService().login(
                               _emailController.text,
-                              _passwordController.text,
-                            );
-                            if (await AuthService().isLoggedIn() == true) {
+                              _passwordController.text) == true){
                               Navigator.pushNamedAndRemoveUntil(context, '/splash', (Route<dynamic> route) => false);
                             }
+                            else{
+                              setState(() {
+                                _errorText = 'Login failed';
+                              });
+                            }
                           } catch (e) {
-                            print(e.toString());
+                            setState(() {
+                              _errorText = 'Login failed ${e.toString()}';
+                            });
                           }
                         },
                         style: ElevatedButton.styleFrom(

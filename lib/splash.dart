@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth_service.dart';
+import 'service/auth_service.dart';
 import 'routes.dart'; // Import routes to navigate
 
 class SplashScreen extends StatefulWidget {
@@ -19,15 +19,15 @@ class _SplashScreenState extends State<SplashScreen> {
     final isLoggedIn = await authService.isLoggedIn(); // Assuming isLoggedIn is an async method
 
     if (isLoggedIn) {
-      Navigator.of(context).pushReplacementNamed(Routes.home);
+      Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
     } else {
-      Navigator.of(context).pushReplacementNamed(Routes.login);
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     );
   }
