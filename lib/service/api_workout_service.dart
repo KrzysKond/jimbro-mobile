@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import '../models/workout.dart';
 
-class ApiService {
+class ApiWorkoutService {
   final String baseUrl = "http://10.0.2.2:8000/api";
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 

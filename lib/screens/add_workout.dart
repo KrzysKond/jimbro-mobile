@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../service/api_service.dart';
+import '../../service/api_workout_service.dart';
 
 class AddWorkoutForm extends StatefulWidget {
   const AddWorkoutForm({super.key});
@@ -26,7 +26,7 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
 
   Future<void> _addWorkout() async {
     if (_formKey.currentState!.validate()) {
-      final success = await ApiService().addWorkout(_titleController.text, _selectedDate, _imageFile!);
+      final success = await ApiWorkoutService().addWorkout(_titleController.text, _selectedDate, _imageFile!);
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Workout Added')));
         Navigator.pop(context); // Navigate back after adding

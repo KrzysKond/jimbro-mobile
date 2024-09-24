@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
-import 'package:jimbro_mobile/service/api_service.dart';
+import 'package:jimbro_mobile/service/api_workout_service.dart';
 import 'package:jimbro_mobile/service/auth_service.dart';
 import 'package:jimbro_mobile/routes.dart';
-import '../add_workout.dart';
+import 'add_workout.dart';
 import '../models/workout.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _fetchWorkouts(String date) async {
     try {
-      List<Workout> fetchedWorkouts = await ApiService().fetchWorkouts(date);
+      List<Workout> fetchedWorkouts = await ApiWorkoutService().fetchWorkouts(date);
       setState(() {
         workouts = fetchedWorkouts;
       });
