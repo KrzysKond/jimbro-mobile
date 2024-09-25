@@ -1,5 +1,5 @@
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:jimbro_mobile/service/api_workout_service.dart';
 import 'package:jimbro_mobile/service/auth_service.dart';
 import 'package:jimbro_mobile/routes.dart';
@@ -37,10 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.group, size: 40, color: Colors.white,),
-            onPressed: (){
-              Navigator.pushNamed(context, '/group');
-            },
+          icon: const Icon(Icons.group, size: 40, color: Colors.white),
+          onPressed: () {
+            Navigator.pushNamed(context, '/group');
+          },
         ),
         title: const Text(
           "JIMBRO",
@@ -66,71 +66,89 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const Center(
-                  child: Text(
-                    "Has Kacper slacked!?",
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white70,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+          child: Column(
+            children: [
+              const Center(
+                child: Text(
+                  "Has Kacper slacked!?",
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              EasyInfiniteDateTimeLine(
+                focusDate: _selectedDate,
+                firstDate: DateTime(2023,1,1),
+                lastDate: DateTime.now(),
+                onDateChange: (date) {
+                  setState(() {
+                    _selectedDate = date;
+                    _fetchWorkouts(_selectedDate.toIso8601String());
+                  });
+                },
+                locale: 'en_ISO',
+
+                dayProps: const EasyDayProps(
+                  todayStyle: DayStyle(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: Color(0xffE0E0E0), // Light gray for inactive days
+                    ),
+                  ),
+                  dayStructure: DayStructure.dayStrDayNum,
+                  activeDayStyle: DayStyle(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.purpleAccent, // Lighter purple for active day
+                          Color(0xff8E44AD), // Darker purple
+                        ],
+                      ),
+                    ),
+                  ),
+                  inactiveDayStyle: DayStyle(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: Color(0xffE0E0E0), // Light gray for inactive days
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                CalendarTimeline(
-                  initialDate: _selectedDate,
-                  firstDate: DateTime(2020, 1, 1),
-                  lastDate: DateTime(2025, 12, 31),
-                  onDateSelected: (date) {
-                    setState(() {
-                      _selectedDate = date;
-                      _fetchWorkouts(_selectedDate.toIso8601String());
-                    });
-                  },
-                  monthColor: Colors.purpleAccent,
-                  dayColor: Colors.purple[200],
-                  activeDayColor: Colors.black,
-                  activeBackgroundDayColor: Colors.purpleAccent,
-                  locale: 'en_ISO',
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: workouts.length,
-              itemBuilder: (context, index) {
-                // Print the photoUrl to the console
-                print('Workout ${index + 1} Photo URL: ${workouts[index].photoUrl}');
+              ),
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  child: ListTile(
-                    title: Text(workouts[index].title),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('User: ${workouts[index].username}'),
-                        if (workouts[index].photoUrl != null)
-                          Image.network(workouts[index].photoUrl!),
-                      ],
+              const SizedBox(height: 20),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: workouts.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    child: ListTile(
+                      title: Text(workouts[index].title),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(workouts[index].username),
+                          if (workouts[index].photoUrl != null)
+                            Image.network(workouts[index].photoUrl!),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+            ],
           ),
-
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

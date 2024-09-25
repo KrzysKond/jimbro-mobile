@@ -109,6 +109,10 @@ class _SearchGroupScreenState extends State<SearchGroupScreen> {
                     itemCount: _filteredGroups.length,
                     itemBuilder: (context, index) {
                       final group = _filteredGroups[index];
+
+                      // Get the number of members in the group
+                      final memberCount = group.members.length;
+
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 5),
                         elevation: 4,
@@ -126,7 +130,7 @@ class _SearchGroupScreenState extends State<SearchGroupScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            group.name,
+                            'Members: $memberCount',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.grey,

@@ -15,7 +15,27 @@ class _GroupScreenState extends State<GroupScreen> {
   @override
   void initState() {
     super.initState();
-    _groupsFuture = ApiGroupService().fetchUserGroups();
+    _fetchGroups();
+  }
+
+  Future<void> _fetchGroups() async {
+    setState(() {
+      _groupsFuture = ApiGroupService().fetchUserGroups();
+    });
+  }
+
+  void _leaveGroup(Group group) async {
+    try {
+      await ApiGroupService().leaveGroup(group.id);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('You have left ${group.name}'),
+      ));
+      _fetchGroups();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to leave ${group.name}: $e'),
+      ));
+    }
   }
 
   @override
@@ -40,8 +60,10 @@ class _GroupScreenState extends State<GroupScreen> {
           children: <Widget>[
             const SizedBox(height: 20),
             Center(
-              child: ElevatedButton(
-                onPressed: () {},
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/searchGroups');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purpleAccent,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -49,22 +71,14 @@ class _GroupScreenState extends State<GroupScreen> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.group_add,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 10),
-                    TextButton(
-                      child: const Text('Join a Group', style: TextStyle(fontSize: 25, color: Colors.white)),
-                      onPressed: (){
-                        Navigator.pushNamed(context, '/searchGroups');
-                      },
-                    ),
-                  ],
+                icon: const Icon(
+                  Icons.group_add,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                label: const Text(
+                  'Join a Group',
+                  style: TextStyle(fontSize: 25, color: Colors.white),
                 ),
               ),
             ),
@@ -95,6 +109,10 @@ class _GroupScreenState extends State<GroupScreen> {
                     itemCount: groups.length,
                     itemBuilder: (context, index) {
                       final group = groups[index];
+                      final membersText = group.members.isNotEmpty
+                          ? '${group.members.length} members'
+                          : 'No members';
+
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 5),
                         elevation: 4,
@@ -112,15 +130,18 @@ class _GroupScreenState extends State<GroupScreen> {
                             ),
                           ),
                           subtitle: Text(
-                            group.name,
+                            membersText,
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
                             ),
                           ),
-                          onTap: () {
-                            // Define action when a group is tapped
-                          },
+                          trailing: IconButton(
+                            icon: const Icon(Icons.exit_to_app, color: Colors.redAccent),
+                            onPressed: () {
+                              _leaveGroup(group);
+                            },
+                          ),
                         ),
                       );
                     },

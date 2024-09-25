@@ -80,6 +80,7 @@ class ApiGroupService {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       List<dynamic> body = jsonDecode(response.body);
       return body.map((dynamic item) => Group.fromJson(item)).toList();
     } else {
@@ -103,4 +104,22 @@ class ApiGroupService {
       throw Exception('Failed to load groups');
     }
   }
+
+  Future<bool> leaveGroup(groupId) async{
+    String? token = await storage.read(key: 'auth_token');
+    final response = await http.post(
+        Uri.parse('$baseUrl/user/group/$groupId/leave/'),
+        headers: {
+          'Authorization': 'Token $token'
+        }
+    );
+    if(response.statusCode ==200){
+      return true;
+    }else{
+      throw Exception(response.statusCode);
+    }
+  }
+
+
+
 }
