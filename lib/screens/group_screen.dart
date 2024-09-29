@@ -63,7 +63,9 @@ class _GroupScreenState extends State<GroupScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/searchGroups');
+                  Navigator.pushNamed(context, '/searchGroups').then((_){
+                    _fetchGroups();
+                  });;
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purpleAccent,
@@ -154,7 +156,9 @@ class _GroupScreenState extends State<GroupScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/createGroup');
+          Navigator.pushNamed(context, '/createGroup').then((_){
+            _fetchGroups();
+          });
         },
         backgroundColor: Colors.purpleAccent,
         child: const Icon(

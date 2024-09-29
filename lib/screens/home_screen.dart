@@ -28,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _fetchWorkouts(_selectedDate.toIso8601String());
   }
 
+
   Future<void> _fetchWorkouts(String date) async {
     try {
       List<Workout> fetchedWorkouts = await ApiWorkoutService().fetchWorkouts(date);
@@ -201,7 +202,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, Routes.addWorkout);
+          Navigator.pushNamed(context, Routes.addWorkout).then((_){
+            _fetchWorkouts(_selectedDate.toIso8601String());
+          });
         },
         backgroundColor: Colors.purpleAccent,
         tooltip: 'Add Today\'s Workout',

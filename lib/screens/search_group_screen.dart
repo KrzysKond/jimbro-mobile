@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/models/group.dart';
+import '../routes.dart';
 import '../service/api_group_service.dart';
 
 class SearchGroupScreen extends StatefulWidget {
@@ -46,6 +47,7 @@ class _SearchGroupScreenState extends State<SearchGroupScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Successfully joined the group!')),
                   );
+                  Navigator.pushReplacementNamed(context, Routes.group);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Failed to join the group: $e')),
