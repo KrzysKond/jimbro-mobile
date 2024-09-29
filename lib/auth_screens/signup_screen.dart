@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/service/auth_service.dart';
 
 class SignupScreen extends StatefulWidget {
-
   const SignupScreen({super.key});
 
   @override
@@ -11,14 +10,12 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _nameController = TextEditingController();
-
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
-
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   String? _errorText;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -28,7 +25,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sign Up"),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text("Sign Up", style: TextStyle(color: Colors.white, fontSize: 30)),
         backgroundColor: Colors.purpleAccent,
         centerTitle: true,
       ),
@@ -36,8 +34,8 @@ class _SignupScreenState extends State<SignupScreen> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height-150,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height - 150,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
                   padding: EdgeInsets.all(padding),
@@ -57,72 +55,14 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         SizedBox(height: padding),
 
-                        SizedBox(
-                          height: textFieldHeight,
-                          child: TextField(
-                            controller: _nameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Name',
-                              labelStyle: TextStyle(color: Colors.white70),
-                              border: OutlineInputBorder(),
-                              filled: true,
-                              fillColor: Colors.black54,
-                            ),
-                            style: const TextStyle(color: Colors.white),
-                            keyboardType: TextInputType.name,
-                          ),
-                        ),
-                        SizedBox(height: padding*0.3),
+                        _buildTextField(_nameController, 'Name', TextInputType.name),
+                        SizedBox(height: padding * 0.3),
+                        _buildTextField(_emailController, 'Email', TextInputType.emailAddress),
+                        SizedBox(height: padding * 0.3),
+                        _buildTextField(_passwordController, 'Password', TextInputType.visiblePassword, obscureText: true),
+                        SizedBox(height: padding * 0.3),
+                        _buildTextField(_confirmPasswordController, 'Confirm Password', TextInputType.visiblePassword, obscureText: true),
 
-                        SizedBox(
-                          height: textFieldHeight,
-                          child: TextField(
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                              labelText: 'Email',
-                              labelStyle: TextStyle(color: Colors.white70),
-                              border: OutlineInputBorder(),
-                              filled: true,
-                              fillColor: Colors.black54,
-                            ),
-                            style: const TextStyle(color: Colors.white),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                        ),
-                        SizedBox(height: padding*0.3),
-
-                        SizedBox(
-                          height: textFieldHeight,
-                          child: TextField(
-                            controller: _passwordController,
-                            decoration: const InputDecoration(
-                              labelText: 'Password',
-                              labelStyle: TextStyle(color: Colors.white70),
-                              border: OutlineInputBorder(),
-                              filled: true,
-                              fillColor: Colors.black54,
-                            ),
-                            style: const TextStyle(color: Colors.white),
-                            obscureText: true,
-                          ),
-                        ),
-                        SizedBox(height: padding*0.3),
-
-                        SizedBox(
-                          height: textFieldHeight,
-                          child: TextField(
-                            controller: _confirmPasswordController,
-                            decoration: const InputDecoration(
-                              labelText: 'Confirm Password',
-                              labelStyle: TextStyle(color: Colors.white70),
-                              border: OutlineInputBorder(),
-                              filled: true,
-                              fillColor: Colors.black54,
-                            ),
-                            style: const TextStyle(color: Colors.white),
-                            obscureText: true,
-                          ),
-                        ),
                         if (_errorText != null)
                           Text(
                             _errorText!,
@@ -136,22 +76,24 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: ElevatedButton(
                             onPressed: () async {
                               try {
-                                if(await AuthService().signUp(
+                                if (await AuthService().signUp(
                                   _nameController.text,
                                   _emailController.text,
                                   _passwordController.text,
-                                ) == true){
+                                ) == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Successfully created the account!')),
+                                  );
                                   Navigator.pushReplacementNamed(context, '/login');
-                                }else{
+                                } else {
                                   setState(() {
-                                  _errorText = 'Signup failed';
+                                    _errorText = 'Signup failed';
                                   });
                                 }
-                              }
-                              catch(e){
+                              } catch (e) {
                                 print(e);
                               }
-                           },
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.purpleAccent,
                             ),
@@ -161,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: padding*0.3),
+                        SizedBox(height: padding * 0.3),
 
                         TextButton(
                           onPressed: () {
@@ -180,6 +122,25 @@ class _SignupScreenState extends State<SignupScreen> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, TextInputType keyboardType, {bool obscureText = false}) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.07,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.white70),
+          border: const OutlineInputBorder(),
+          filled: true,
+          fillColor: Colors.black54,
+        ),
+        style: const TextStyle(color: Colors.white),
+        keyboardType: keyboardType,
+        obscureText: obscureText,
       ),
     );
   }

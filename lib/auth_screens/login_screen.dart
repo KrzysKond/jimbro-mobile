@@ -22,13 +22,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text("Login", style: TextStyle(color: Colors.white, fontSize: 30)),
         backgroundColor: Colors.purpleAccent,
         centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height-200,
             width: MediaQuery.of(context).size.width,
             child: Padding(

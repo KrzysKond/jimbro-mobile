@@ -86,10 +86,15 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: _pickImageFromCamera,
-                          icon: const Icon(Icons.camera_alt),
-                          label: const Text("Take a Selfie!"),
+                          icon: Icon(Icons.camera_alt, color: Colors.grey[300]),
+                          label: Text(
+                            "Take a Selfie!",
+                            style: TextStyle(color: Colors.grey[300]),
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.purpleAccent,
+                            minimumSize: const Size(200, 60),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                           ),
                         ),
                       ],

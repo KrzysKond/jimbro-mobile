@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
           icon: const Icon(Icons.group, size: 40, color: Colors.white),
           onPressed: () {
@@ -161,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w600,
-                            fontSize: 30,
+                            fontSize: 26,
                             letterSpacing: 0.5,
                           ),
                         ),
