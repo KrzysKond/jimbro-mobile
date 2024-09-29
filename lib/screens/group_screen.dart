@@ -109,9 +109,7 @@ class _GroupScreenState extends State<GroupScreen> {
                     itemCount: groups.length,
                     itemBuilder: (context, index) {
                       final group = groups[index];
-                      final membersText = group.members.isNotEmpty
-                          ? '${group.members.length} members'
-                          : 'No members';
+                      final membersText = group.membersText;
 
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 5),

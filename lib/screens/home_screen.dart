@@ -12,6 +12,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _getMonthName(int month) {
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return monthNames[month - 1];
+  }
   DateTime _selectedDate = DateTime.now();
   List<Workout> workouts = [];
 
@@ -71,17 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
           child: Column(
             children: [
-              const Center(
-                child: Text(
-                  "Has Kacper slacked!?",
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
               EasyInfiniteDateTimeLine(
                 focusDate: _selectedDate,
                 firstDate: DateTime(2023,1,1),
@@ -93,7 +89,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
                 locale: 'en_ISO',
-
+                headerBuilder: (context, date) {
+                  String formatedDate = "${_getMonthName(_selectedDate.month)} ${_selectedDate.day}, ${_selectedDate.year}";                  return Container(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 20, 10),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        formatedDate,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                },
                 dayProps: const EasyDayProps(
                   todayStyle: DayStyle(
                     decoration: BoxDecoration(
@@ -131,16 +142,53 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: workouts.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                    child: ListTile(
-                      title: Text(workouts[index].title),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(workouts[index].username),
-                          if (workouts[index].photoUrl != null)
-                            Image.network(workouts[index].photoUrl!),
-                        ],
+                    color: Colors.grey.shade200,
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: BorderSide(
+                        color: Colors.grey.shade600,
+                        width: 2
+                      ),
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        title: Text(
+                          workouts[index].title,
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 30,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 5),
+                            Text(
+                              workouts[index].username,
+                              style: const TextStyle(
+                                color: Colors.purpleAccent,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            if (workouts[index].photoUrl != null)
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  workouts[index].photoUrl!,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   );
