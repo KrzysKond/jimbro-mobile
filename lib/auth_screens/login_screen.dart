@@ -3,7 +3,6 @@ import 'package:jimbro_mobile/routes.dart';
 import '../service/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-
   const LoginScreen({super.key});
 
   @override
@@ -13,7 +12,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String? _errorText; //TODO :: Add specific feedbacks
+  String? _errorText;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
-            height: MediaQuery.of(context).size.height-200,
+            height: MediaQuery.of(context).size.height - 200,
             width: MediaQuery.of(context).size.width,
             child: Padding(
               padding: EdgeInsets.all(padding),
@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                     Text(
+                    Text(
                       'Login to JimBro',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -55,7 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Email',
                           labelStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white70),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white70),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white70, width: 2),
+                          ),
                           filled: true,
                           fillColor: Colors.black54,
                         ),
@@ -63,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                       ),
                     ),
-                    SizedBox(height: padding*0.5),
+                    SizedBox(height: padding * 0.5),
 
                     SizedBox(
                       height: textFieldHeight,
@@ -72,7 +80,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Password',
                           labelStyle: TextStyle(color: Colors.white70),
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white70),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white70),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white70, width: 2),
+                          ),
                           filled: true,
                           fillColor: Colors.black54,
                         ),
@@ -81,28 +97,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-
                     if (_errorText != null)
                       Text(
                         _errorText!,
                         style: const TextStyle(color: Colors.red),
                         textAlign: TextAlign.center,
                       ),
-                    SizedBox(height:padding),
+                    SizedBox(height: padding),
+
                     SizedBox(
                       height: buttonHeight,
                       child: ElevatedButton(
                         onPressed: () async {
                           setState(() {
-                          _errorText = null;
+                            _errorText = null;
                           });
                           try {
-                            if(await AuthService().login(
-                              _emailController.text,
-                              _passwordController.text) == true){
-                              Navigator.pushNamedAndRemoveUntil(context, Routes.signup, (Route<dynamic> route) => false);
-                            }
-                            else{
+                            if (await AuthService().login(
+                                _emailController.text, _passwordController.text) == true) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, Routes.splash, (Route<dynamic> route) => false);
+                            } else {
                               setState(() {
                                 _errorText = 'Login failed';
                               });
@@ -122,12 +137,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: padding*0.5),
+                    SizedBox(height: padding * 0.5),
 
                     TextButton(
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, Routes.signup);
-                        },
+                      },
                       child: Text(
                         'Create an account',
                         style: TextStyle(color: Theme.of(context).colorScheme.primary),
@@ -138,7 +153,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-
         ),
       ),
     );

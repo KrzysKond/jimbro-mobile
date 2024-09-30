@@ -108,9 +108,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           onPressed: () {
                             Navigator.pushReplacementNamed(context, Routes.login);
                           },
-                          child: const Text(
+                          child: Text(
                             'Already have an account? Login',
-                            style: TextStyle(color: Colors.purpleAccent),
+                            style: TextStyle(color: Theme.of(context).primaryColor),
                           ),
                         ),
                       ],
@@ -133,7 +133,15 @@ class _SignupScreenState extends State<SignupScreen> {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(color: Colors.white70),
-          border: const OutlineInputBorder(),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white70), // Default border
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white70), // White border when enabled
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide:  BorderSide(color: Colors.white70, width: 2), // White border when focused
+          ),
           filled: true,
           fillColor: Colors.black54,
         ),
