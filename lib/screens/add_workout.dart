@@ -41,8 +41,6 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Today's Workout", style: TextStyle(color: Colors.white, fontSize: 25)),
-        backgroundColor: Colors.purpleAccent,
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -62,14 +60,14 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
                     const SizedBox(height: 40),
                     TextFormField(
                       controller: _titleController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Workout Title',
-                        labelStyle: TextStyle(color: Colors.purpleAccent),
+                        labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.purpleAccent),
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.purple),
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
                         ),
                       ),
                       style: const TextStyle(color: Colors.white70),
@@ -92,7 +90,7 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
                             style: TextStyle(color: Colors.grey[300]),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purpleAccent,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             minimumSize: const Size(200, 60),
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                           ),
@@ -106,7 +104,7 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
                           height: 300,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.purpleAccent, width: 2),
+                            border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 2),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
@@ -121,7 +119,7 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
                     ElevatedButton(
                       onPressed: _addWorkout,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purpleAccent,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         minimumSize: const Size(double.infinity, 50),
                       ),
                       child: const Text(

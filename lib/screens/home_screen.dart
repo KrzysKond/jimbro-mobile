@@ -44,7 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
           icon: const Icon(Icons.group, size: 40, color: Colors.white),
           onPressed: () {
@@ -55,8 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
           "JIMBRO",
           style: TextStyle(color: Colors.white, fontSize: 30, letterSpacing: 2),
         ),
-        backgroundColor: Colors.purpleAccent,
-        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () async {
@@ -107,8 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   );
                 },
-                dayProps: const EasyDayProps(
-                  todayStyle: DayStyle(
+                dayProps: EasyDayProps(
+                  todayStyle: const DayStyle(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       color: Color(0xffE0E0E0), // Light gray for inactive days
@@ -117,18 +114,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   dayStructure: DayStructure.dayStrDayNum,
                   activeDayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.purpleAccent, // Lighter purple for active day
-                          Color(0xff8E44AD), // Darker purple
+                          Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.secondary,
                         ],
                       ),
                     ),
                   ),
-                  inactiveDayStyle: DayStyle(
+                  inactiveDayStyle: const DayStyle(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       color: Color(0xffE0E0E0), // Light gray for inactive days
@@ -149,8 +146,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                       side: BorderSide(
-                        color: Colors.grey.shade600,
-                        width: 2
+                          color: Colors.grey.shade600,
+                          width: 2
                       ),
                     ),
                     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -173,10 +170,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SizedBox(height: 5),
                             Text(
                               workouts[index].username,
-                              style: const TextStyle(
-                                color: Colors.purpleAccent,
+                              style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -206,7 +203,6 @@ class _MyHomePageState extends State<MyHomePage> {
             _fetchWorkouts(_selectedDate.toIso8601String());
           });
         },
-        backgroundColor: Colors.purpleAccent,
         tooltip: 'Add Today\'s Workout',
         child: const Icon(Icons.add, color: Colors.white),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jimbro_mobile/routes.dart';
 import '../service/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,10 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text("Login", style: TextStyle(color: Colors.white, fontSize: 30)),
-        backgroundColor: Colors.purpleAccent,
-        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -39,13 +37,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    const Text(
+                     Text(
                       'Login to JimBro',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.purpleAccent,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     SizedBox(height: padding),
@@ -102,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             if(await AuthService().login(
                               _emailController.text,
                               _passwordController.text) == true){
-                              Navigator.pushNamedAndRemoveUntil(context, '/splash', (Route<dynamic> route) => false);
+                              Navigator.pushNamedAndRemoveUntil(context, Routes.signup, (Route<dynamic> route) => false);
                             }
                             else{
                               setState(() {
@@ -116,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purpleAccent,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
                         ),
                         child: const Text(
                           'Login',
@@ -128,11 +126,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/signup');
+                        Navigator.pushReplacementNamed(context, Routes.signup);
                         },
-                      child: const Text(
+                      child: Text(
                         'Create an account',
-                        style: TextStyle(color: Colors.purpleAccent),
+                        style: TextStyle(color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                   ],

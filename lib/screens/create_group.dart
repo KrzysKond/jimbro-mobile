@@ -29,8 +29,6 @@ class _CreateGroupFormState extends State<CreateGroupForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Create New Group", style: TextStyle(color: Colors.white, fontSize: 25)),
-        backgroundColor: Colors.purpleAccent,
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -44,14 +42,14 @@ class _CreateGroupFormState extends State<CreateGroupForm> {
                   const SizedBox(height: 40),
                   TextFormField(
                     controller: _nameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Group Name',
-                      labelStyle: TextStyle(color: Colors.purpleAccent),
+                      labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.purpleAccent),
+                        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.purple),
+                        borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
                       ),
                     ),
                     style: const TextStyle(color: Colors.white70),
@@ -68,7 +66,7 @@ class _CreateGroupFormState extends State<CreateGroupForm> {
                       _createGroup();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purpleAccent,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       minimumSize: const Size(double.infinity, 50),
                     ),
                     child: const Text(

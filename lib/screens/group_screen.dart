@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/models/group.dart';
+import 'package:jimbro_mobile/routes.dart';
 import '../service/api_group_service.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -42,7 +43,6 @@ class _GroupScreenState extends State<GroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Groups",
           style: TextStyle(
@@ -51,8 +51,6 @@ class _GroupScreenState extends State<GroupScreen> {
             letterSpacing: 2,
           ),
         ),
-        backgroundColor: Colors.purpleAccent,
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -63,12 +61,12 @@ class _GroupScreenState extends State<GroupScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/searchGroups').then((_){
+                  Navigator.pushNamed(context, Routes.searchGroups).then((_){
                     _fetchGroups();
                   });;
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purpleAccent,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -86,12 +84,12 @@ class _GroupScreenState extends State<GroupScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            const Text(
+            Text(
               'Your Groups',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.purpleAccent,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 10),
@@ -124,10 +122,10 @@ class _GroupScreenState extends State<GroupScreen> {
                           contentPadding: const EdgeInsets.all(15),
                           title: Text(
                             group.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Colors.purpleAccent,
+                              color: Theme.of(context).colorScheme.primary
                             ),
                           ),
                           subtitle: Text(
@@ -138,7 +136,7 @@ class _GroupScreenState extends State<GroupScreen> {
                             ),
                           ),
                           trailing: IconButton(
-                            icon: const Icon(Icons.exit_to_app, color: Colors.redAccent),
+                            icon: const Icon(Icons.exit_to_app, color: Colors.red),
                             onPressed: () {
                               _leaveGroup(group);
                             },
@@ -156,11 +154,11 @@ class _GroupScreenState extends State<GroupScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/createGroup').then((_){
+          Navigator.pushNamed(context, Routes.createGroup).then((_){
             _fetchGroups();
           });
         },
-        backgroundColor: Colors.purpleAccent,
+
         child: const Icon(
           Icons.add,
           size: 30,

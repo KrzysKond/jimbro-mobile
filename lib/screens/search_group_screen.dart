@@ -66,13 +66,10 @@ class _SearchGroupScreenState extends State<SearchGroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           'Search Groups',
           style: TextStyle(color: Colors.white, fontSize: 30),
         ),
-        backgroundColor: Colors.purpleAccent,
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -80,6 +77,7 @@ class _SearchGroupScreenState extends State<SearchGroupScreen> {
           children: [
             TextField(
               onChanged: _filterGroups,
+              style: const TextStyle(color: Colors.white),
               decoration: const InputDecoration(
                 labelText: 'Search Groups',
                 border: OutlineInputBorder(),
@@ -126,10 +124,10 @@ class _SearchGroupScreenState extends State<SearchGroupScreen> {
                           contentPadding: const EdgeInsets.all(15),
                           title: Text(
                             group.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Colors.purpleAccent,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           subtitle: Text(

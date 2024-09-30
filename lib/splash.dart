@@ -19,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final isLoggedIn = await authService.isLoggedIn(); // Assuming isLoggedIn is an async method
 
     if (isLoggedIn) {
-      Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (Route<dynamic> route) => false);
     } else {
-      Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.login, (Route<dynamic> route) => false);
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/service/auth_service.dart';
 
+import '../routes.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -25,10 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text("Sign Up", style: TextStyle(color: Colors.white, fontSize: 30)),
-        backgroundColor: Colors.purpleAccent,
-        centerTitle: true,
       ),
       body: SafeArea(
         child: LayoutBuilder(
@@ -44,13 +43,13 @@ class _SignupScreenState extends State<SignupScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        const Text(
+                       Text(
                           'Create a New Account',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.purpleAccent,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         SizedBox(height: padding),
@@ -84,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Successfully created the account!')),
                                   );
-                                  Navigator.pushReplacementNamed(context, '/login');
+                                  Navigator.pushReplacementNamed(context, Routes.login);
                                 } else {
                                   setState(() {
                                     _errorText = 'Signup failed';
@@ -95,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.purpleAccent,
+                              backgroundColor: Theme.of(context).colorScheme.primary,
                             ),
                             child: const Text(
                               'Sign Up',
@@ -107,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/login');
+                            Navigator.pushReplacementNamed(context, Routes.login);
                           },
                           child: const Text(
                             'Already have an account? Login',
