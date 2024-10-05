@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:8000"; // Replace with your actual backend URL
+  final String baseUrl = "http://10.0.2.2:8000";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(); // Secure storage instance
   String? _token;
 

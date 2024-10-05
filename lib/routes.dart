@@ -30,7 +30,7 @@ class Routes {
       addWorkout: (context) => const AddWorkoutForm(),
       group: (context) => const GroupScreen(),
       createGroup: (context) => const CreateGroupForm(),
-      searchGroups: (context) => SearchGroupScreen()
+      searchGroups: (context) => JoinGroupScreen()
 
     };
   }

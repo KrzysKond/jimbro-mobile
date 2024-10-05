@@ -120,6 +120,23 @@ class ApiGroupService {
     }
   }
 
+  Future<Group> fetchGroupByCode(String inviteCode) async {
+    final String? token = await storage.read(key: 'auth_token');
+    final response = await http.get(
+        Uri.parse('$baseUrl/user/group/group-by-invite-code/?invite_code=$inviteCode'),
+        headers: {
+          'Authorization': 'Token $token',
+        }
+    );
+
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return Group.fromJson(data);
+    } else {
+      throw Exception('Failed to fetch group');
+    }
+  }
 
 
 }

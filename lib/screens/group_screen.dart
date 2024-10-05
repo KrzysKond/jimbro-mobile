@@ -125,15 +125,27 @@ class _GroupScreenState extends State<GroupScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.primary
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                          subtitle: Text(
-                            membersText,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Invitation code: ${group.inviteCode!}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Text(
+                                'Members: $membersText',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
                           trailing: IconButton(
                             icon: const Icon(Icons.exit_to_app, color: Colors.red),
