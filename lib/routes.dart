@@ -10,6 +10,7 @@ import 'screens/add_workout.dart';
 import 'screens/home_screen.dart';
 import 'service/auth_service.dart';
 import 'splash.dart';
+import 'screens/group_screen.dart';
 
 class Routes {
   static const String splash = '/splash';
@@ -30,8 +31,7 @@ class Routes {
       addWorkout: (context) => const AddWorkoutForm(),
       group: (context) => const GroupScreen(),
       createGroup: (context) => const CreateGroupForm(),
-      searchGroups: (context) => JoinGroupScreen()
-
+      searchGroups: (context) => JoinGroupScreen(),
     };
   }
 }

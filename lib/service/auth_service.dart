@@ -53,7 +53,6 @@ class AuthService {
         final data = jsonDecode(response.body);
         _token = data['token'];
 
-        // Store the token securely in local storage
         await _secureStorage.write(key: 'auth_token', value: _token);
         return true;
       } else {

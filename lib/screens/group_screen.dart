@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/models/group.dart';
 import 'package:jimbro_mobile/routes.dart';
 import '../service/api_group_service.dart';
+import 'package:jimbro_mobile/screens/groupchat_screen.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
@@ -119,6 +120,16 @@ class _GroupScreenState extends State<GroupScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ListTile(
+                          leading: IconButton(
+                            icon: Icon(Icons.chat, color: Theme.of(context).primaryColor,),
+                            onPressed: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GroupChatScreen(groupId: groups[index].id),
+                                ),
+                              );                            },
+                          ),
                           contentPadding: const EdgeInsets.all(15),
                           title: Text(
                             group.name,
@@ -132,7 +143,7 @@ class _GroupScreenState extends State<GroupScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Invitation code: ${group.inviteCode!}',
+                                'Identifier: ${group.inviteCode!}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
