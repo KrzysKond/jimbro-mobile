@@ -95,7 +95,7 @@ class GroupChatService {
   void sendMessage(String message) {
     if (message.isNotEmpty) {
       final data = {
-        'message': message,
+        'content': message,
       };
       channel.sink.add(json.encode(data));
       print('Message sent: $data');

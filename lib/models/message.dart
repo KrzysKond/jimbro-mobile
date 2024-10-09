@@ -9,7 +9,7 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      content: json['message'] as String? ?? '',
+      content: json['content'] as String? ?? '',
       sender: json['sender_id'] as int?,
      // timestamp: DateTime.parse(json['timestamp']),
     );
