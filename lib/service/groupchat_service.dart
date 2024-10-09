@@ -22,7 +22,6 @@ class GroupChatService {
     List<Message> messages = [];
     String? token = await _secureStorage.read(key: 'auth_token');
     messages = await fetchMessages();
-    print(messages);
     _webSocketUrl = 'ws://10.0.2.2:8000/ws/chat/$groupId/?token=$token';
     _connect();
   }
@@ -81,7 +80,6 @@ class GroupChatService {
   }
 
   void _handleMessage(String message) {
-    print(message);
     try {
       final data = json.decode(message);
       Message receivedMessage = Message.fromJson(data);

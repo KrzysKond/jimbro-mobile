@@ -1,17 +1,22 @@
 class Message {
   final String content;
-  final int? sender;
+  final int? senderId;
+  final String? senderName;
+  final DateTime? timestamp;
 
   Message({
     required this.content,
-    required this.sender,
+    required this.senderId,
+    required this.senderName,
+    required this.timestamp,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       content: json['content'] as String? ?? '',
-      sender: json['sender_id'] as int?,
-     // timestamp: DateTime.parse(json['timestamp']),
+      senderId: json['sender_id'] as int?,
+      senderName: json['sender_name'] as String?,
+      timestamp: json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null,
     );
   }
 }

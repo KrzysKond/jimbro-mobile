@@ -126,7 +126,7 @@ class _GroupScreenState extends State<GroupScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => GroupChatScreen(groupId: groups[index].id),
+                                  builder: (context) => GroupChatScreen(groupId: groups[index].id, groupName: groups[index].name,),
                                 ),
                               );                            },
                           ),

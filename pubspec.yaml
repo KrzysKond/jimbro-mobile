@@ -34,6 +34,7 @@ dependencies:
   image_picker:
   http:
   flutter_secure_storage:
+  intl:
 
 
 
