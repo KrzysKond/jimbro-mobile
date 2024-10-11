@@ -101,4 +101,19 @@ class ApiWorkoutService {
       return false;
     }
   }
+
+  Future<void> toggleLike(int workoutId) async {
+    String? token = await storage.read(key: 'auth_token');
+    final response = await http.post(
+      Uri.parse('$baseUrl/workout/$workoutId/toggle_like/'),
+      headers: {
+        'Authorization': 'Token $token',
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to toggle like');
+    }
+  }
+
 }

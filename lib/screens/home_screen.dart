@@ -40,6 +40,24 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> _toggleLike(Workout workout) async {
+    try {
+      await ApiWorkoutService().toggleLike(workout.id);
+      setState(() {
+        if(workout.isLiked){
+          workout.isLiked = false;
+          workout.fires -= 1 ;
+        }else{
+          workout.isLiked = true;
+          workout.fires += 1;
+        }
+      });
+    } catch (e) {
+      print('Error toggling like: $e');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     _selectedDate = date;
                     _fetchWorkouts(_selectedDate.toIso8601String());
                   });
+                  print('ow');
                 },
                 locale: 'en_ISO',
                 headerBuilder: (context, date) {
@@ -140,23 +159,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: workouts.length,
                 itemBuilder: (context, index) {
+                  Workout workout = workouts[index];
                   return Card(
                     color: Colors.grey.shade200,
                     elevation: 20,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
-                      side: BorderSide(
-                          color: Colors.grey.shade600,
-                          width: 2
-                      ),
+                      side: BorderSide(color: Colors.grey.shade600, width: 2),
                     ),
                     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.fromLTRB(10,10,10,0),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         title: Text(
-                          workouts[index].title,
+                          workout.title,
                           style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w600,
@@ -169,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             const SizedBox(height: 5),
                             Text(
-                              workouts[index].username,
+                              workout.username,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
@@ -177,21 +194,40 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            if (workouts[index].photoUrl != null)
+                            if (workout.photoUrl != null)
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.network(
-                                  workouts[index].photoUrl!,
+                                  workout.photoUrl!,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 ),
                               ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    workout.isLiked ? Icons.whatshot : Icons.whatshot_outlined,
+                                    color: workout.isLiked ? Colors.red[800] : Colors.black54,
+                                    size: 40,
+                                  ),
+                                  onPressed: () {
+                                    _toggleLike(workout);
+                                  }
+                                ),
+                                const SizedBox(width: 10),
+                                Text('${workout.fires}', style: const TextStyle(fontSize: 20),),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
                   );
                 },
+
               ),
             ],
           ),
