@@ -44,7 +44,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
         isLoading = false;
       });
     } catch (e) {
-      print('Error fetching comments: $e');
       setState(() {
         isLoading = false;
       });
@@ -74,26 +73,39 @@ class _CommentsScreenState extends State<CommentsScreen> {
               : SingleChildScrollView(
             child: Column(
               children: [
-                Text(
-                  widget.workoutTitle,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                if (widget.workoutPhotoURL != null)
-                  ClipRRect(
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      widget.workoutPhotoURL!,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          widget.workoutTitle,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        if (widget.workoutPhotoURL != null)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              widget.workoutPhotoURL!,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
+                ),
                 const SizedBox(height: 20),
                 if (comments.isEmpty && isTimedOut)
                   Center(
