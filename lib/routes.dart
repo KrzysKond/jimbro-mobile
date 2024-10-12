@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jimbro_mobile/screens/create_group.dart';
-import 'package:jimbro_mobile/screens/group_screen.dart';
-import 'package:jimbro_mobile/screens/search_group_screen.dart';
+import 'package:jimbro_mobile/screens/groups/create_group.dart';
+import 'package:jimbro_mobile/screens/groups/group_screen.dart';
+import 'package:jimbro_mobile/screens/groups/search_group_screen.dart';
 import 'package:jimbro_mobile/splash.dart';
 import 'auth_screens/login_screen.dart';
 import 'main.dart';
@@ -10,7 +10,7 @@ import 'screens/add_workout.dart';
 import 'screens/home_screen.dart';
 import 'service/auth_service.dart';
 import 'splash.dart';
-import 'screens/group_screen.dart';
+import 'screens/groups/group_screen.dart';
 
 class Routes {
   static const String splash = '/splash';

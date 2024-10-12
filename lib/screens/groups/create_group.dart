@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/service/api_group_service.dart';
-import '../../service/api_workout_service.dart';
+import '../../../service/api_workout_service.dart';
 
 class CreateGroupForm extends StatefulWidget {
   const CreateGroupForm({super.key});

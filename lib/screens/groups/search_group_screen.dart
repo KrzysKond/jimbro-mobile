@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/models/group.dart';
-import '../service/api_group_service.dart';
+import '../../service/api_group_service.dart';
 
 class JoinGroupScreen extends StatefulWidget {
   @override

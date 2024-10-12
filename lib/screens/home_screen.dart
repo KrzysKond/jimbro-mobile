@@ -5,6 +5,10 @@ import 'package:jimbro_mobile/service/auth_service.dart';
 import 'package:jimbro_mobile/routes.dart';
 import 'add_workout.dart';
 import '../models/workout.dart';
+import '../models/comment.dart';
+import 'comments/comments_screen.dart';
+import 'comments/add_comments.dart';
+
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -12,6 +16,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  DateTime _selectedDate = DateTime.now();
+  List<Workout> workouts = [];
+
   String _getMonthName(int month) {
     const monthNames = [
       "January", "February", "March", "April", "May", "June",
@@ -19,15 +26,11 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
     return monthNames[month - 1];
   }
-  DateTime _selectedDate = DateTime.now();
-  List<Workout> workouts = [];
-
   @override
   void initState() {
     super.initState();
     _fetchWorkouts(_selectedDate.toIso8601String());
   }
-
 
   Future<void> _fetchWorkouts(String date) async {
     try {
@@ -44,10 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       await ApiWorkoutService().toggleLike(workout.id);
       setState(() {
-        if(workout.isLiked){
+        if (workout.isLiked) {
           workout.isLiked = false;
-          workout.fires -= 1 ;
-        }else{
+          workout.fires -= 1;
+        } else {
           workout.isLiked = true;
           workout.fires += 1;
         }
@@ -56,7 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error toggling like: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -97,18 +99,18 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               EasyInfiniteDateTimeLine(
                 focusDate: _selectedDate,
-                firstDate: DateTime(2023,1,1),
+                firstDate: DateTime(2023, 1, 1),
                 lastDate: DateTime.now(),
                 onDateChange: (date) {
                   setState(() {
                     _selectedDate = date;
                     _fetchWorkouts(_selectedDate.toIso8601String());
                   });
-                  print('ow');
                 },
                 locale: 'en_ISO',
                 headerBuilder: (context, date) {
-                  String formatedDate = "${_getMonthName(_selectedDate.month)} ${_selectedDate.day}, ${_selectedDate.year}";                  return Container(
+                  String formatedDate = "${_getMonthName(_selectedDate.month)} ${_selectedDate.day}, ${_selectedDate.year}";
+                  return Container(
                     padding: const EdgeInsets.fromLTRB(0, 0, 20, 10),
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -127,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   todayStyle: const DayStyle(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Color(0xffE0E0E0), // Light gray for inactive days
+                      color: Color(0xffE0E0E0),
                     ),
                   ),
                   dayStructure: DayStructure.dayStrDayNum,
@@ -147,12 +149,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   inactiveDayStyle: const DayStyle(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Color(0xffE0E0E0), // Light gray for inactive days
+                      color: Color(0xffE0E0E0),
                     ),
                   ),
                 ),
               ),
-
               const SizedBox(height: 20),
               ListView.builder(
                 shrinkWrap: true,
@@ -169,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10,10,10,0),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         title: Text(
@@ -203,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -215,11 +216,57 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   onPressed: () {
                                     _toggleLike(workout);
-                                  }
+                                  },
                                 ),
                                 const SizedBox(width: 10),
-                                Text('${workout.fires}', style: const TextStyle(fontSize: 20),),
+                                Text('${workout.fires}', style: const TextStyle(fontSize: 20)),
+                                const SizedBox(width: 20),
                               ],
+                            ),
+                            const SizedBox(height: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                for (int i = 0; i < workout.comments.length && i < 2; i++)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: Text(
+                                      '${workout.comments[i].authorName}: ${workout.comments[i].text}',
+                                      style: const TextStyle(fontSize: 16, color: Colors.black54),
+                                    ),
+                                  ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CommentsScreen(
+                                          workoutId: workout.id,
+                                          workoutPhotoURL: workout.photoUrl,
+                                          workoutTitle: workout.title,),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('View all comments'),
+                                ),
+                              ],
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddCommentScreen(
+                                      workoutId: workout.id,
+                                      workoutImageUrl: workout.photoUrl,
+                                      title: workout.title,
+                                    ),
+                                  ),
+                                ).then((_) {
+                                  _fetchWorkouts(_selectedDate.toIso8601String());
+                                });
+                              },
+                              child: const Text('Add a comment'),
                             ),
                           ],
                         ),
@@ -227,7 +274,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   );
                 },
-
               ),
             ],
           ),
@@ -235,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, Routes.addWorkout).then((_){
+          Navigator.pushNamed(context, Routes.addWorkout).then((_) {
             _fetchWorkouts(_selectedDate.toIso8601String());
           });
         },
@@ -244,4 +290,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jimbro_mobile/models/message.dart';
-import '../service/groupchat_service.dart';
+import '../../common/format_timestap.dart';
+import '../../service/groupchat_service.dart';
 
 class GroupChatScreen extends StatefulWidget {
   final int groupId;
@@ -76,14 +77,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     super.dispose();
   }
 
-  String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    if (now.year == timestamp.year && now.month == timestamp.month && now.day == timestamp.day) {
-      return DateFormat('hh:mm a').format(timestamp);
-    } else {
-      return DateFormat('EEEE, hh:mm a').format(timestamp);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +131,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                           const SizedBox(height: 4),
                           Text(
                             message.timestamp != null
-                                ? _formatTimestamp(message.timestamp!)
+                                ? formatTimestamp(message.timestamp!)
                                 : '',
                             style: TextStyle(color: subtitleColor, fontSize: 12),
                           ),

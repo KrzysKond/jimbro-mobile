@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/models/group.dart';
 import 'package:jimbro_mobile/routes.dart';
-import '../service/api_group_service.dart';
-import 'package:jimbro_mobile/screens/groupchat_screen.dart';
+import '../../service/api_group_service.dart';
+import 'package:jimbro_mobile/screens/groups/groupchat_screen.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
