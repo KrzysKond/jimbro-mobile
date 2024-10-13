@@ -8,8 +8,9 @@ class Workout {
   final String? photoUrl;
   final DateTime date;
   final String username;
-  List<Comment> comments;
+ // List<Comment> comments;
   int fires;
+  int commentsCount;
   bool isLiked;
 
   Workout({
@@ -18,16 +19,17 @@ class Workout {
     required this.photoUrl,
     required this.date,
     required this.username,
-    this.fires = 0,
     required this.isLiked,
-    required this.comments
+    this.fires = 0,
+    this.commentsCount = 0,
+   // required this.comments,
   });
 
   factory Workout.fromJson(Map<String, dynamic> json) {
-    var commentList = json['comments'] as List<dynamic>?;
+    /*var commentList = json['comments'] as List<dynamic>?;
     List<Comment> comments = commentList != null
         ? commentList.map((commentJson) => Comment.fromJson(commentJson)).toList()
-        : [];
+        : [];*/
     return Workout(
       id: json['id'] as int,
       title: json['title'],
@@ -36,7 +38,8 @@ class Workout {
       username: json['username'],
       fires: json['fires'],
       isLiked: json['isLiked'],
-      comments: comments
+      commentsCount: json['comments_count'] as int,
+    //  comments: comments
     );
   }
 }

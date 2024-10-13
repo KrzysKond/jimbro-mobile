@@ -7,7 +7,6 @@ import 'add_workout.dart';
 import '../models/workout.dart';
 import '../models/comment.dart';
 import 'comments/comments_screen.dart';
-import 'comments/add_comments.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -218,24 +217,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     _toggleLike(workout);
                                   },
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: 5),
                                 Text('${workout.fires}', style: const TextStyle(fontSize: 20)),
-                                const SizedBox(width: 20),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                for (int i = 0; i < workout.comments.length && i < 2; i++)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 4.0),
-                                    child: Text(
-                                      '${workout.comments[i].authorName}: ${workout.comments[i].text}',
-                                      style: const TextStyle(fontSize: 16, color: Colors.black54),
-                                    ),
-                                  ),
-                                TextButton(
+                                const SizedBox(width: 30),
+                                IconButton(
                                   onPressed: () {
                                     Navigator.push(
                                       context,
@@ -247,26 +232,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     );
                                   },
-                                  child: const Text('View all comments'),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AddCommentScreen(
-                                      workoutId: workout.id,
-                                      workoutImageUrl: workout.photoUrl,
-                                      title: workout.title,
-                                    ),
+                                  icon: Icon(
+                                    Icons.comment,
+                                    size: 40,
+                                    color: Colors.red[800],
                                   ),
-                                ).then((_) {
-                                  _fetchWorkouts(_selectedDate.toIso8601String());
-                                });
-                              },
-                              child: const Text('Add a comment'),
+                                ),
+                                const SizedBox(width: 5),
+                                Text('${workout.commentsCount}', style: const TextStyle(fontSize: 20)),
+                              ],
                             ),
                           ],
                         ),
