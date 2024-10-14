@@ -19,6 +19,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   late GroupChatService chatService;
   List<Message> messages = [];
   final ScrollController _scrollController = ScrollController();
+  int currentPage = 1;
+  bool isLoadingMore = false;
 
   @override
   void initState() {
@@ -28,13 +30,20 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     );
     _fetchMessages();
     _initializeMessages();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.minScrollExtent) {
+        _fetchMoreMessages();
+      }
+    });
   }
 
   Future<void> _fetchMessages() async {
     try {
-      List<Message> fetchedMessages = await chatService.fetchMessages();
+      List<Message> fetchedMessages = await chatService.fetchMessages(currentPage);
       setState(() {
-        messages = fetchedMessages;
+        messages = fetchedMessages.reversed.toList();
+        currentPage++;
       });
       _scrollToBottom();
       if (messages.isNotEmpty) {
@@ -42,6 +51,23 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       }
     } catch (e) {
       print('Error fetching messages: $e');
+    }
+  }
+
+  Future<void> _fetchMoreMessages() async {
+    if (isLoadingMore) return;
+    isLoadingMore = true;
+
+    try {
+      List<Message> fetchedMessages = await chatService.fetchMessages(currentPage);
+      setState(() {
+        messages.insertAll(0, fetchedMessages.reversed);
+        currentPage++;
+      });
+    } catch (e) {
+      print('Error fetching more messages: $e');
+    } finally {
+      isLoadingMore = false;
     }
   }
 
@@ -76,7 +102,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {

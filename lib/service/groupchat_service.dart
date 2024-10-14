@@ -21,12 +21,12 @@ class GroupChatService {
   Future<void> _initialize() async {
     List<Message> messages = [];
     String? token = await _secureStorage.read(key: 'auth_token');
-    messages = await fetchMessages();
+    messages = await fetchMessages(1);
     _webSocketUrl = 'ws://10.0.2.2:8000/ws/chat/$groupId/?token=$token';
     _connect();
   }
 
-  Future<List<Message>> fetchMessages() async {
+  Future<List<Message>> fetchMessages(int page) async {
     List<Message> messages = [];
     try {
       String? token = await _secureStorage.read(key: 'auth_token');
@@ -35,9 +35,9 @@ class GroupChatService {
         print('No token found');
         return messages;
       }
-
+      print(page);
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/chat/group-messages/$groupId/'),
+        Uri.parse('http://10.0.2.2:8000/api/chat/group-messages/$groupId/?page=$page'),
         headers: {
           'Authorization': 'Token $token',
         },
@@ -47,14 +47,17 @@ class GroupChatService {
         final decodedResponse = utf8.decode(response.bodyBytes);
         final decodedJson = json.decode(decodedResponse);
 
-        // Access the 'data' list from the response
         if (decodedJson['status'] == true && decodedJson['data'] != null) {
           final List<dynamic> jsonData = decodedJson['data'];
           print('Fetched JSON data: $jsonData');
           messages = jsonData.map((item) => Message.fromJson(item)).toList();
+          print(messages);
         } else {
           print('No messages found or "data" key missing.');
+          print(decodedJson);
         }
+      } else {
+        print('Failed to fetch messages. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error fetching messages: $e');
