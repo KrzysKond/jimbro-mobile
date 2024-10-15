@@ -9,7 +9,7 @@ class Group {
   Group({required this.id, required this.name, required this.inviteCode, required this.members});
 
   factory Group.fromJson(Map<String, dynamic> json) {
-    var membersList = json['members'] as List?; // Use List?
+    var membersList = json['members'] as List?;
     List<Member> members = (membersList ?? []).map((i) => Member.fromJson(i)).toList();
     return Group(
       id: json['id'],

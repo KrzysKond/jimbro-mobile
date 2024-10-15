@@ -72,7 +72,6 @@ class AuthService {
   Future<void> logout() async {
     _token = null;
 
-    // Remove the token from secure storage
     await _secureStorage.delete(key: 'auth_token');
   }
 
@@ -86,7 +85,7 @@ class AuthService {
       final response = await http.get(
         url,
         headers: {
-          'Authorization': 'Bearer $_token', // Using Bearer token format for authorization
+          'Authorization': 'Token $_token',
           'Content-Type': 'application/json',
         },
       );

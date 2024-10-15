@@ -95,7 +95,7 @@ class ApiWorkoutService {
       final response = await http.Response.fromStream(imageResponse);
       print('Response body: ${response.body}');
       print('Image upload response status: ${imageResponse.statusCode}');
-      return imageResponse.statusCode == 200; // Check if the image upload was successful
+      return imageResponse.statusCode == 200;
     } catch (e) {
       print('Error uploading image: $e');
       return false;
@@ -114,6 +114,42 @@ class ApiWorkoutService {
     if (response.statusCode != 200) {
       throw Exception('Failed to toggle like');
     }
+  }
+
+  Future<List<Workout>> fetchLastWeekWorkouts(int? user_id) async {
+    List<Workout> workouts = [];
+
+    try {
+      String? token = await storage.read(key: 'auth_token');
+
+      if (token == null) {
+        print('No token found');
+        return workouts;
+      }
+      final url = user_id == null
+          ? Uri.parse('$baseUrl/workout/last-week-workouts/')
+          : Uri.parse('$baseUrl/workout/last-week-workouts/?user_id=$user_id');
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Token $token',
+        },
+      );
+
+
+      if (response.statusCode == 200) {
+        final decodedResponse = utf8.decode(response.bodyBytes);
+        final List<dynamic> jsonData = json.decode(decodedResponse);
+        print('Fetched JSON data: $jsonData');
+        workouts = jsonData.map((item) => Workout.fromJson(item)).toList();
+      } else {
+        print('Failed to load workouts: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching workouts: $e');
+    }
+    return workouts;
   }
 
 }

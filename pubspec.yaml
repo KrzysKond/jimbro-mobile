@@ -35,6 +35,7 @@ dependencies:
   http:
   flutter_secure_storage:
   intl:
+  table_calendar:
 
 
 

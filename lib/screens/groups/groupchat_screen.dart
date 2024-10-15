@@ -21,6 +21,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   final ScrollController _scrollController = ScrollController();
   int currentPage = 1;
   bool isLoadingMore = false;
+  bool isLoadingInitial = true;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       setState(() {
         messages = fetchedMessages.reversed.toList();
         currentPage++;
+        isLoadingInitial = false;
       });
       _scrollToBottom();
       if (messages.isNotEmpty) {
@@ -51,6 +53,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       }
     } catch (e) {
       print('Error fetching messages: $e');
+      setState(() {
+        isLoadingInitial = false;
+      });
     }
   }
 
@@ -124,47 +129,69 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  final message = messages[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            message.senderName ?? '',
-                            style: TextStyle(
-                              color: textColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+              child: Stack(
+                children: [
+                  ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: primaryColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            message.content,
-                            style: TextStyle(color: Colors.white),
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                message.senderName ?? '',
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                message.content,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                message.timestamp != null
+                                    ? formatTimestamp(message.timestamp!)
+                                    : '',
+                                style: TextStyle(color: subtitleColor, fontSize: 12),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            message.timestamp != null
-                                ? formatTimestamp(message.timestamp!)
-                                : '',
-                            style: TextStyle(color: subtitleColor, fontSize: 12),
-                          ),
-                        ],
+                        ),
+                      );
+                    },
+                  ),
+                  if (isLoadingInitial)
+                    const Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                  );
-                },
+                  if (isLoadingMore)
+                    const Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 20,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
               ),
             ),
             Padding(

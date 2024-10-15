@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jimbro_mobile/models/group.dart';
 import 'package:jimbro_mobile/routes.dart';
+import 'package:jimbro_mobile/screens/profile/profile_screen.dart';
 import '../../service/api_group_service.dart';
 import 'package:jimbro_mobile/screens/groups/groupchat_screen.dart';
 
@@ -52,6 +53,19 @@ class _GroupScreenState extends State<GroupScreen> {
             letterSpacing: 2,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(user_id: null),
+                ),
+              );
+            },
+            icon: const Icon(Icons.person, size: 40),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -62,9 +76,9 @@ class _GroupScreenState extends State<GroupScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(context, Routes.searchGroups).then((_){
+                  Navigator.pushNamed(context, Routes.searchGroups).then((_) {
                     _fetchGroups();
-                  });;
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
@@ -111,58 +125,80 @@ class _GroupScreenState extends State<GroupScreen> {
                     itemCount: groups.length,
                     itemBuilder: (context, index) {
                       final group = groups[index];
-                      final membersText = group.membersText;
+                      final members = group.members;
 
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ListTile(
-                          leading: IconButton(
-                            icon: Icon(Icons.chat, color: Theme.of(context).primaryColor,),
-                            onPressed: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GroupChatScreen(groupId: groups[index].id, groupName: groups[index].name,),
-                                ),
-                              );                            },
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
                           ),
-                          contentPadding: const EdgeInsets.all(15),
-                          title: Text(
-                            group.name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.primary,
+                          child: ExpansionTile(
+                            tilePadding: const EdgeInsets.all(10),
+                            leading: IconButton(
+                              icon: Icon(Icons.chat, color: Theme.of(context).primaryColor),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GroupChatScreen(
+                                      groupId: group.id,
+                                      groupName: group.name,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Identifier: ${group.inviteCode!}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
+                            title: Text(
+                              group.name,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              Text(
-                                'Members: $membersText',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
+                            ),
+                            subtitle: Text(
+                              'Identifier: ${group.inviteCode!}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            childrenPadding: const EdgeInsets.all(15),
+                            children: [
+                              Column(
+                                children: members.map((member) {
+                                  return TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProfileScreen(user_id: member.id),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      member.name,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                              const SizedBox(height: 10),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
                                 ),
+                                onPressed: () {
+                                  _leaveGroup(group);
+                                },
+                                child: const Text('Leave Group', style: TextStyle(color: Colors.white)),
                               ),
                             ],
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.exit_to_app, color: Colors.red),
-                            onPressed: () {
-                              _leaveGroup(group);
-                            },
                           ),
                         ),
                       );
@@ -177,11 +213,10 @@ class _GroupScreenState extends State<GroupScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, Routes.createGroup).then((_){
+          Navigator.pushNamed(context, Routes.createGroup).then((_) {
             _fetchGroups();
           });
         },
-
         child: const Icon(
           Icons.add,
           size: 30,

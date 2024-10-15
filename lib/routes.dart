@@ -4,13 +4,10 @@ import 'package:jimbro_mobile/screens/groups/group_screen.dart';
 import 'package:jimbro_mobile/screens/groups/search_group_screen.dart';
 import 'package:jimbro_mobile/splash.dart';
 import 'auth_screens/login_screen.dart';
-import 'main.dart';
 import 'auth_screens/signup_screen.dart';
 import 'screens/add_workout.dart';
 import 'screens/home_screen.dart';
-import 'service/auth_service.dart';
-import 'splash.dart';
-import 'screens/groups/group_screen.dart';
+import 'screens/profile/settings_screen.dart';
 
 class Routes {
   static const String splash = '/splash';
@@ -21,6 +18,7 @@ class Routes {
   static const String group = '/group';
   static const String createGroup = '/createGroup';
   static const String searchGroups = '/searchGroups';
+  static const String settings = '/settings';
 
   static Map<String, WidgetBuilder> get routes {
     return {
@@ -32,6 +30,7 @@ class Routes {
       group: (context) => const GroupScreen(),
       createGroup: (context) => const CreateGroupForm(),
       searchGroups: (context) => JoinGroupScreen(),
+      settings: (context) => SettingsScreen(),
     };
   }
 }
