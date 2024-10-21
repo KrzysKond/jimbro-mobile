@@ -14,8 +14,9 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final DateTime _selectedDate = DateTime.now();
-  XFile? _imageFile; // To store the selected image
-  final ImagePicker _picker = ImagePicker(); // For selecting images
+  XFile? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+  bool _isLoading = false;
 
   Future<void> _pickImageFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
@@ -26,7 +27,20 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
 
   Future<void> _addWorkout() async {
     if (_formKey.currentState!.validate()) {
-      final success = await ApiWorkoutService().addWorkout(_titleController.text, _selectedDate, _imageFile!);
+      setState(() {
+        _isLoading = true;
+      });
+
+      final success = await ApiWorkoutService().addWorkout(
+        _titleController.text,
+        _selectedDate,
+        _imageFile!,
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Workout Added')));
         Navigator.pop(context); // Navigate back after adding
@@ -116,17 +130,22 @@ class _AddWorkoutFormState extends State<AddWorkoutForm> {
                         ),
                       ),
                     const Spacer(),
-                    ElevatedButton(
-                      onPressed: _addWorkout,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        minimumSize: const Size(double.infinity, 50),
+                    if (_isLoading)
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    else
+                      ElevatedButton(
+                        onPressed: _addWorkout,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          minimumSize: const Size(double.infinity, 50),
+                        ),
+                        child: const Text(
+                          'Add Workout',
+                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      child: const Text(
-                        'Add Workout',
-                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
                   ],
                 ),
               ),

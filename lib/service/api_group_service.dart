@@ -80,7 +80,6 @@ class ApiGroupService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       List<dynamic> body = jsonDecode(response.body);
       return body.map((dynamic item) => Group.fromJson(item)).toList();
     } else {

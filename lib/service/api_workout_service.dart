@@ -30,7 +30,6 @@ class ApiWorkoutService {
       if (response.statusCode == 200) {
         final decodedResponse = utf8.decode(response.bodyBytes);
         final List<dynamic> jsonData = json.decode(decodedResponse);
-        print('Fetched JSON data: $jsonData');
         workouts = jsonData.map((item) => Workout.fromJson(item)).toList();
       } else {
         print('Failed to load workouts: ${response.statusCode}');

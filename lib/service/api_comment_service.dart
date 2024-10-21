@@ -19,7 +19,8 @@ class ApiCommentService {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      List<dynamic> jsonData = json.decode(response.body);
+      final decodedResponse = utf8.decode(response.bodyBytes);
+      List<dynamic> jsonData = json.decode(decodedResponse);
       return jsonData.map((json) => Comment.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load comments');

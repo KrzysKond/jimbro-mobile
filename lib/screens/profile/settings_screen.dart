@@ -20,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final ApiUserService apiUserService = ApiUserService();
 
   Future<void> _changeProfilePicture() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
