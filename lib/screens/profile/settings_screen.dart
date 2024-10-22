@@ -20,16 +20,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final ApiUserService apiUserService = ApiUserService();
 
   Future<void> _changeProfilePicture() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      setState(() {
-        profilePictureUrl = pickedFile.path;
-      });
 
       bool uploadSuccess = await apiUserService.uploadImage(pickedFile);
 
       if (uploadSuccess) {
+        _fetchUserData();
         print('Image uploaded successfully');
       } else {
         print('Failed to upload image');

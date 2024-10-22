@@ -115,7 +115,7 @@ class _GroupScreenState extends State<GroupScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return const Center(child: Text('Error: check your internet connection'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text('No groups found.'));
                   }
@@ -127,78 +127,81 @@ class _GroupScreenState extends State<GroupScreen> {
                       final group = groups[index];
                       final members = group.members;
 
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: ExpansionTile(
-                            tilePadding: const EdgeInsets.all(10),
-                            leading: IconButton(
-                              icon: Icon(Icons.chat, color: Theme.of(context).primaryColor),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => GroupChatScreen(
-                                      groupId: group.id,
-                                      groupName: group.name,
-                                    ),
-                                  ),
-                                );
-                              },
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
                             ),
-                            title: Text(
-                              group.name,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                            subtitle: Text(
-                              'Identifier: ${group.inviteCode!}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            childrenPadding: const EdgeInsets.all(15),
-                            children: [
-                              Column(
-                                children: members.map((member) {
-                                  return TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProfileScreen(user_id: member.id),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      member.name,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.blue,
+                            child: ExpansionTile(
+                              tilePadding: const EdgeInsets.all(10),
+                              leading: IconButton(
+                                icon: Icon(Icons.chat, color: Theme.of(context).primaryColor),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GroupChatScreen(
+                                        groupId: group.id,
+                                        groupName: group.name,
                                       ),
                                     ),
                                   );
-                                }).toList(),
-                              ),
-                              const SizedBox(height: 10),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                ),
-                                onPressed: () {
-                                  _leaveGroup(group);
                                 },
-                                child: const Text('Leave Group', style: TextStyle(color: Colors.white)),
                               ),
-                            ],
+                              title: Text(
+                                group.name,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Identifier: ${group.inviteCode!}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              childrenPadding: const EdgeInsets.all(15),
+                              children: [
+                                Column(
+                                  children: members.map((member) {
+                                    return TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProfileScreen(user_id: member.id),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        member.name,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).colorScheme.primary,
+                                  ),
+                                  onPressed: () {
+                                    _leaveGroup(group);
+                                  },
+                                  child: const Text('Leave Group', style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

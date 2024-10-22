@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import '../models/workout.dart';
 
 class ApiWorkoutService {
-  final String baseUrl = "http://10.0.2.2:8000/api";
+  final String baseUrl = "http://10.0.2.2:80/api";
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<List<Workout>> fetchWorkouts(String date) async {
@@ -32,7 +32,7 @@ class ApiWorkoutService {
         final List<dynamic> jsonData = json.decode(decodedResponse);
         workouts = jsonData.map((item) => Workout.fromJson(item)).toList();
       } else {
-        print('Failed to load workouts: ${response.statusCode}');
+        print('No workouts found');
       }
     } catch (e) {
       print('Error fetching workouts: $e');

@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../models/member.dart';
 
 class ApiUserService {
-  final String baseUrl = "http://10.0.2.2:8000/api";
+  final String baseUrl = "http://10.0.2.2:80/api";
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
 

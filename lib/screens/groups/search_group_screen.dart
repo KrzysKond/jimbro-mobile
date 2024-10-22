@@ -55,12 +55,21 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                 try {
                   await ApiGroupService().joinGroup(_group!.id);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Successfully joined the group!')),
+                    const SnackBar(content: Text('Successfully joined the group!')),
                   );
-                  Navigator.pop(context); // Go back after successful join
+                  Navigator.pop(context);
                 } catch (e) {
+                  String errorMessage;
+
+                  if (e.toString().contains('User is already a member of this group.')) {
+                    errorMessage = 'Failed to join the group: You are already a member.';
+                  } else {
+                    errorMessage = 'Failed to join the group: ${e.toString()}';
+                  }
+                  print(errorMessage);
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Failed to join the group: $e')),
+                    SnackBar(content: Text(errorMessage)),
                   );
                 }
               },

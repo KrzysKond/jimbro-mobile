@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../models/comment.dart';
 
 class ApiCommentService {
-  final String baseUrl = 'http://10.0.2.2:8000/api/workout';
+  final String baseUrl = 'http://10.0.2.2:80/api/workout';
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   Future<List<Comment>> fetchComments(int workoutId) async {

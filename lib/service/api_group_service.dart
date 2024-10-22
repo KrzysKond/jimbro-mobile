@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/group.dart';
 
 class ApiGroupService {
-  final String baseUrl = "http://10.0.2.2:8000/api";
+  final String baseUrl = "http://10.0.2.2:80/api";
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<bool> createGroup(String groupName) async {
@@ -59,14 +59,15 @@ class ApiGroupService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
+      } else if (response.statusCode == 409) {
+        throw Exception('User already is a member of the group');
       } else {
         final responseBody = json.decode(response.body);
         String detail = responseBody['detail'] ?? 'Unknown error occurred';
-
         throw Exception(detail);
       }
     } catch (e) {
-      throw Exception('Error joining group: $e');
+      throw Exception('Error joining group: ${e.toString()}');
     }
   }
 
