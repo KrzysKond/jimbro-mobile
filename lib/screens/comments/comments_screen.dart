@@ -7,11 +7,14 @@ class CommentsScreen extends StatefulWidget {
   final int workoutId;
   final String? workoutPhotoURL;
   final String workoutTitle;
+  final Function() onCommentAdded;
 
-  CommentsScreen({
+
+  const CommentsScreen({
     required this.workoutId,
     required this.workoutPhotoURL,
     required this.workoutTitle,
+    required this.onCommentAdded
   });
 
   @override
@@ -80,6 +83,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
           authorName: 'You',
           createdAt: DateTime.now(),
         ));
+        widget.onCommentAdded();
         _commentController.clear();
       });
     } catch (e) {

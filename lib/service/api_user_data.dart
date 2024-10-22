@@ -32,6 +32,41 @@ class ApiUserService {
     }
   }
 
+  Future<String?> fetchUserPicture(int? user_id) async {
+    try {
+      String? token = await storage.read(key: 'auth_token');
+
+      if (token == null) {
+        print('No token found');
+        return null;
+      }
+
+      final url = user_id == null
+          ? Uri.parse('$baseUrl/user/info/profile-picture/')
+          : Uri.parse('$baseUrl/user/info/profile-picture/?user_id=$user_id');
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Token $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
+        print('Fetched JSON data: $jsonData');
+
+        return jsonData['profile_picture'] as String?;
+      } else {
+        print('Failed to load user data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+    return null;
+  }
+
+
   Future<Member?> fetchUserData(int? user_id) async {
     try {
       String? token = await storage.read(key: 'auth_token');

@@ -138,13 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   itemBuilder: (context, index) {
                     Workout workout = workouts[index];
                     return WorkoutCard(
-                      id: workout.id,
-                      title: workout.title,
-                      username: workout.username,
-                      photoUrl: workout.photoUrl,
-                      isLiked: workout.isLiked,
-                      fires: workout.fires,
-                      commentsCount: workout.commentsCount,
+                      workout: workout,
                     );
                   },
                 ),
