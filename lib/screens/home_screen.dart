@@ -8,6 +8,7 @@ import 'add_workout.dart';
 import '../models/workout.dart';
 import '../models/comment.dart';
 import 'comments/comments_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -16,6 +17,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   DateTime _selectedDate = DateTime.now();
   List<Workout> workouts = [];
 
@@ -30,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _fetchWorkouts(_selectedDate.toIso8601String());
+    _firebaseMessaging.getToken().then((token) => print(token));
   }
 
   Future<void> _fetchWorkouts(String date) async {

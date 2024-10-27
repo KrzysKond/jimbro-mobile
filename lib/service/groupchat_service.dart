@@ -24,7 +24,7 @@ class GroupChatService {
     print(token);
     print(groupId);
     messages = await fetchMessages(1);
-    _webSocketUrl = 'ws://10.0.2.2:80/ws/chat/$groupId/?token=$token';
+    _webSocketUrl = 'ws://10.0.2.2:8000/ws/chat/$groupId/?token=$token';
     _connect();
   }
 
@@ -39,7 +39,7 @@ class GroupChatService {
       }
       print(page);
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:80/api/chat/group-messages/$groupId/?page=$page'),
+        Uri.parse('http://10.0.2.2:8000/api/chat/group-messages/$groupId/?page=$page'),
         headers: {
           'Authorization': 'Token $token',
         },

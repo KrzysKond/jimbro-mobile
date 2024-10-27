@@ -1,9 +1,10 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:80";
+  final String baseUrl = "http://10.0.2.2:8000";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(); // Secure storage instance
   String? _token;
 
@@ -36,6 +37,9 @@ class AuthService {
   }
 
   Future<bool> login(String email, String password) async {
+
+    String? deviceToken = await FirebaseMessaging.instance.getToken();
+
     try {
       final url = Uri.parse('$baseUrl/api/user/token/');
       final response = await http.post(
@@ -46,6 +50,7 @@ class AuthService {
         body: jsonEncode({
           'email': email,
           'password': password,
+          'device_token': deviceToken,
         }),
       );
 

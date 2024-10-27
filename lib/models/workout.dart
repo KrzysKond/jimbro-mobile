@@ -21,8 +21,8 @@ class Workout {
     required this.username,
     required this.isLiked,
     required this.userId,
-    this.fires = 0,
-    this.commentsCount = 0,
+    required this.fires,
+    required this.commentsCount,
   });
 
   factory Workout.fromJson(Map<String, dynamic> json) {

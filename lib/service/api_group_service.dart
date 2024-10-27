@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/group.dart';
 
 class ApiGroupService {
-  final String baseUrl = "http://10.0.2.2:80/api";
+  final String baseUrl = "http://10.0.2.2:8000/api";
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<bool> createGroup(String groupName) async {
