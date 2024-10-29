@@ -13,6 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _errorText;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,38 +106,49 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     SizedBox(height: padding),
 
-                    SizedBox(
-                      height: buttonHeight,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            _errorText = null;
-                          });
-                          try {
-                            if (await AuthService().login(
-                                _emailController.text, _passwordController.text) == true) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, Routes.splash, (Route<dynamic> route) => false);
-                            } else {
+                    if (_isLoading)
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      )
+                    else
+                      SizedBox(
+                        height: buttonHeight,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            setState(() {
+                              _errorText = null;
+                              _isLoading = true; // Set loading state to true
+                            });
+                            try {
+                              if (await AuthService().login(
+                                  _emailController.text, _passwordController.text) ==
+                                  true) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, Routes.splash, (Route<dynamic> route) => false);
+                              } else {
+                                setState(() {
+                                  _errorText = 'Login failed';
+                                  _isLoading = false;
+                                });
+                              }
+                            } catch (e) {
                               setState(() {
-                                _errorText = 'Login failed';
+                                _errorText = 'Login failed ${e.toString()}';
+                                _isLoading = false;
                               });
                             }
-                          } catch (e) {
-                            setState(() {
-                              _errorText = 'Login failed ${e.toString()}';
-                            });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
-                        ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(color: Colors.white),
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
                     SizedBox(height: padding * 0.5),
 
                     TextButton(

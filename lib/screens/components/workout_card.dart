@@ -24,26 +24,14 @@ class _WorkoutCardState extends State<WorkoutCard> {
   Member? user;
   late bool _isLiked;
   late int _fires;
-  String? profilePicture;
 
   @override
   void initState() {
     super.initState();
     _isLiked = widget.workout.isLiked;
     _fires = widget.workout.fires;
-    _fetchUserPhoto(widget.workout.userId);
   }
 
-  Future<void> _fetchUserPhoto(int? user_id) async{
-    try {
-      String? profilePic = await ApiUserService().fetchUserPicture(user_id);
-      setState(() {
-         profilePicture = profilePic;
-      });
-    } catch (e) {
-      print('Error fetching user: $e');
-    }
-  }
 
   Future<void> _toggleLike() async {
     try {
@@ -101,10 +89,10 @@ class _WorkoutCardState extends State<WorkoutCard> {
                       CircleAvatar(
                         radius: 30,
                         backgroundColor: Colors.grey.shade300,
-                        backgroundImage: (profilePicture != null)
-                            ? NetworkImage(profilePicture!)
+                        backgroundImage: (widget.workout.profilePicture != null)
+                            ? NetworkImage(widget.workout.profilePicture!)
                             : null,
-                        child: (profilePicture == null)
+                        child: (widget.workout.profilePicture == null)
                             ? const Icon(Icons.person, size: 30, color: Colors.grey)
                             : null,
                       ),
@@ -135,11 +123,15 @@ class _WorkoutCardState extends State<WorkoutCard> {
               if (widget.workout.photoUrl != null)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    widget.workout.photoUrl!,
+                  child: SizedBox(
+                    height: 380,
                     width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Image.network(
+                        widget.workout.photoUrl!,
+                      ),
+                    ),
                   ),
                 ),
               const SizedBox(height: 10),

@@ -12,7 +12,7 @@ class Workout {
   int fires;
   int commentsCount;
   bool isLiked;
-
+  final String? profilePicture;
   Workout({
     required this.id,
     required this.title,
@@ -23,6 +23,7 @@ class Workout {
     required this.userId,
     required this.fires,
     required this.commentsCount,
+    required this.profilePicture
   });
 
   factory Workout.fromJson(Map<String, dynamic> json) {
@@ -36,6 +37,7 @@ class Workout {
       fires: json['fires'] as int,
       isLiked: json['isLiked'],
       commentsCount: json['comments_count'] as int,
+      profilePicture: json['profile_picture']
     );
   }
 }
