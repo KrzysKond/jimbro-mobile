@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthService {
-  final String baseUrl = "http://10.0.2.2:8000";
+  final String baseUrl = "http://ec2-18-193-77-180.eu-central-1.compute.amazonaws.com";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(); // Secure storage instance
   String? _token;
 
@@ -97,6 +97,29 @@ class AuthService {
 
       if (response.statusCode == 200) {
         return response;
+      } else {
+        print('Failed to fetch data: ${response.statusCode} ${response.body}');
+        throw Exception('Failed to fetch data.');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      throw Exception('Error fetching data.');
+    }
+  }
+
+  Future<bool> deleteAccount() async{
+    final url = Uri.parse('$baseUrl/api/user/info/delete-account/');
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': 'Token $_token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
       } else {
         print('Failed to fetch data: ${response.statusCode} ${response.body}');
         throw Exception('Failed to fetch data.');

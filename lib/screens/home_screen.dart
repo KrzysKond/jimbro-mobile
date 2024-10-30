@@ -1,13 +1,11 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jimbro_mobile/screens/components/workout_card.dart';
 import 'package:jimbro_mobile/service/api_workout_service.dart';
-import 'package:jimbro_mobile/service/auth_service.dart';
 import 'package:jimbro_mobile/routes.dart';
-import 'add_workout.dart';
+import '../ads/banner.dart';
 import '../models/workout.dart';
-import '../models/comment.dart';
-import 'comments/comments_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 
@@ -20,7 +18,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   DateTime _selectedDate = DateTime.now();
   List<Workout> workouts = [];
-
+  late BannerAdManager _bannerAdManager;
+  BannerAd? _bannerAd;
   String _getMonthName(int month) {
     const monthNames = [
       "January", "February", "March", "April", "May", "June",
@@ -31,9 +30,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _bannerAdManager = BannerAdManager();
+    _loadBannerAd();
     _fetchWorkouts(_selectedDate.toIso8601String());
-    _firebaseMessaging.getToken().then((token) => print(token));
   }
+
+  void _loadBannerAd() {
+    _bannerAdManager.loadBannerAd(() {
+      setState(() {
+        _bannerAd = _bannerAdManager.bannerAd;
+        print("Banner Ad loaded successfully.");
+      });
+    }, (error) {
+      print("Failed to load banner ad: ${error.message}");
+    });
+  }
+
+
+
 
   Future<void> _fetchWorkouts(String date) async {
     try {
@@ -45,7 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error fetching workouts: $e');
     }
   }
-
+@override
+  void dispose() {
+  _bannerAd?.dispose();
+  super.dispose();
+  }
 
 
   @override
@@ -133,7 +151,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+
+                if (_bannerAd != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: SizedBox(
+                      height: _bannerAd!.size.height.toDouble(),
+                      width: _bannerAd!.size.width.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
+                  ),
+
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

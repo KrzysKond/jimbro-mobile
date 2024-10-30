@@ -1,37 +1,41 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jimbro_mobile/models/member.dart';
 import 'package:jimbro_mobile/models/workout.dart';
-import 'package:jimbro_mobile/screens/components/workout_card.dart'; // Import your WorkoutCard
+import 'package:jimbro_mobile/screens/components/workout_card.dart';
 import 'package:jimbro_mobile/routes.dart';
 import 'package:jimbro_mobile/service/api_user_data.dart';
 import 'package:jimbro_mobile/service/api_workout_service.dart';
-
+import '../../ads/banner.dart'; // Import your BannerAdManager
 
 class ProfileScreen extends StatefulWidget {
   final int? user_id;
 
   ProfileScreen({required this.user_id});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
-
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Member? user;
   List<Workout> workouts = [];
   List<DateTime> workoutsDates = [];
+  late BannerAdManager _bannerAdManager;
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
+    _bannerAdManager = BannerAdManager();
+    _loadBannerAd();  // Load the banner ad
     _fetchWorkouts(widget.user_id);
     _fetchUser(widget.user_id);
   }
 
-  Future<void> _fetchUser(int? user_id) async{
+  Future<void> _fetchUser(int? user_id) async {
     try {
       Member? fetchedUser = await ApiUserService().fetchUserData(user_id);
       setState(() {
@@ -61,7 +65,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         workoutDate.day == date.day);
   }
 
+  void _loadBannerAd() {
+    _bannerAdManager.loadBannerAd(() {
+      setState(() {
+        _bannerAd = _bannerAdManager.bannerAd;
+        print("Banner Ad loaded successfully.");
+      });
+    }, (error) {
+      print("Failed to load banner ad: ${error.message}");
+    });
+  }
 
+  @override
+  void dispose() {
+    _bannerAdManager.dispose(); // Dispose of the BannerAdManager
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +98,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
                 Text(
                   user?.name ?? '',
                   style: TextStyle(
@@ -103,11 +121,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ? NetworkImage(user!.profilePicture!)
                         : null,
                     child: (user == null || user!.profilePicture == null)
-                        ? const Icon(Icons.person, size: 60, color: Colors.white) // Default icon
+                        ? const Icon(Icons.person, size: 60, color: Colors.white)
                         : null,
                   ),
                 ),
-
                 const SizedBox(height: 50),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
@@ -127,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     itemBuilder: (context, index) {
                       DateTime day = DateTime.now().subtract(Duration(days: 6 - index));
                       bool workoutExists = hasWorkout(day);
-          
+
                       return Container(
                         margin: const EdgeInsets.all(2.0),
                         decoration: BoxDecoration(
@@ -144,6 +161,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                 ),
+                if (_bannerAd != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: SizedBox(
+                      height: _bannerAd!.size.height.toDouble(),
+                      width: _bannerAd!.size.width.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
+                  ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -155,6 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
+                // Add the banner ad here
               ],
             ),
           ),

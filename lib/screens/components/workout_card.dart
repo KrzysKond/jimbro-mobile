@@ -69,35 +69,35 @@ class _WorkoutCardState extends State<WorkoutCard> {
             children: [
               const SizedBox(height: 5, width: 10),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileScreen(user_id: widget.workout.userId),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(bottom: 15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.transparent, width: 2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.grey.shade300,
-                        backgroundImage: (widget.workout.profilePicture != null)
-                            ? NetworkImage(widget.workout.profilePicture!)
-                            : null,
-                        child: (widget.workout.profilePicture == null)
-                            ? const Icon(Icons.person, size: 30, color: Colors.grey)
-                            : null,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen(user_id: widget.workout.userId),
                       ),
-                      const SizedBox(width: 12),
-                      Text(
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.transparent, width: 2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.grey.shade300,
+                          backgroundImage: (widget.workout.profilePicture != null)
+                              ? NetworkImage(widget.workout.profilePicture!)
+                              : null,
+                          child: (widget.workout.profilePicture == null)
+                              ? const Icon(Icons.person, size: 30, color: Colors.grey)
+                              : null,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
                           widget.workout.username,
                           style: TextStyle(
                             fontSize: 18,
@@ -106,9 +106,9 @@ class _WorkoutCardState extends State<WorkoutCard> {
                           ),
                         ),
 
-                    ],
-                  ),
-                )
+                      ],
+                    ),
+                  )
               ),
               Text(
                 widget.workout.title,

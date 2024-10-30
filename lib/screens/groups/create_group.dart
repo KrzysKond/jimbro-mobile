@@ -39,6 +39,7 @@ class _CreateGroupFormState extends State<CreateGroupForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   const SizedBox(height: 40),
                   TextFormField(
                     controller: _nameController,

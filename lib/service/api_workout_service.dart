@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import '../models/workout.dart';
 
 class ApiWorkoutService {
-  final String baseUrl = "http://10.0.2.2:8000/api";
+  final String baseUrl = "http://ec2-18-193-77-180.eu-central-1.compute.amazonaws.com/api";
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<List<Workout>> fetchWorkouts(String date) async {
@@ -44,7 +44,6 @@ class ApiWorkoutService {
   Future<bool> addWorkout(String title, DateTime date, XFile imageFile) async {
     try {
       String? token = await storage.read(key: 'auth_token');
-      print('Stored token: $token');
       if (token == null) {
         print('No token found');
         return false;
@@ -89,14 +88,10 @@ class ApiWorkoutService {
       )
         ..headers['Authorization'] = 'Token $token'
         ..files.add(await http.MultipartFile.fromPath('image', imageFile.path));
-      print('Request Headers: ${imageRequest.headers}');
       final imageResponse = await imageRequest.send();
       final response = await http.Response.fromStream(imageResponse);
-      print('Response body: ${response.body}');
-      print('Image upload response status: ${imageResponse.statusCode}');
       return imageResponse.statusCode == 200;
     } catch (e) {
-      print('Error uploading image: $e');
       return false;
     }
   }
@@ -140,7 +135,6 @@ class ApiWorkoutService {
       if (response.statusCode == 200) {
         final decodedResponse = utf8.decode(response.bodyBytes);
         final List<dynamic> jsonData = json.decode(decodedResponse);
-        print('Fetched JSON data: $jsonData');
         workouts = jsonData.map((item) => Workout.fromJson(item)).toList();
       } else {
         print('Failed to load workouts: ${response.statusCode}');

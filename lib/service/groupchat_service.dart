@@ -4,7 +4,6 @@ import 'package:jimbro_mobile/models/message.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:http/http.dart' as http;
-import '../models/message.dart';
 
 class GroupChatService {
   final int groupId;
@@ -24,7 +23,7 @@ class GroupChatService {
     print(token);
     print(groupId);
     messages = await fetchMessages(1);
-    _webSocketUrl = 'ws://10.0.2.2:8000/ws/chat/$groupId/?token=$token';
+    _webSocketUrl = 'ws://ec2-18-193-77-180.eu-central-1.compute.amazonaws.com/ws/chat/$groupId/?token=$token';
     _connect();
   }
 
@@ -39,7 +38,7 @@ class GroupChatService {
       }
       print(page);
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/chat/group-messages/$groupId/?page=$page'),
+        Uri.parse('http://ec2-18-193-77-180.eu-central-1.compute.amazonaws.com/api/chat/group-messages/$groupId/?page=$page'),
         headers: {
           'Authorization': 'Token $token',
         },

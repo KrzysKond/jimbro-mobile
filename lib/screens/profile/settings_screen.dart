@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import '../../models/member.dart';
 import '../../service/auth_service.dart';
 import '../../service/api_user_data.dart';  // Import your ApiUserService
+import '../../ads/banner.dart'; // Import your BannerAdManager
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -19,11 +21,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final picker = ImagePicker();
   final ApiUserService apiUserService = ApiUserService();
 
+  // Define BannerAdManager and the large banner ad
+  late BannerAdManager _bannerAdManager;
+  BannerAd? _largeBannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData(); // Fetch user data when the screen is initialized
+
+    // Initialize the BannerAdManager
+    _bannerAdManager = BannerAdManager();
+    _loadLargeBannerAd(); // Load the large banner ad
+  }
+
+  Future<void> _loadLargeBannerAd() async {
+    _bannerAdManager.loadLargeBannerAd(() {
+      setState(() {
+        _largeBannerAd = _bannerAdManager.largeBannerAd;
+        print("Large Banner Ad loaded successfully.");
+      });
+    }, (error) {
+      print("Failed to load large banner ad: ${error.message}");
+    });
+  }
+
   Future<void> _changeProfilePicture() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-
       bool uploadSuccess = await apiUserService.uploadImage(pickedFile);
 
       if (uploadSuccess) {
@@ -48,9 +74,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _fetchUserData(); // Fetch user data when the screen is initialized
+  void dispose() {
+    _bannerAdManager.dispose(); // Dispose of the BannerAdManager
+    super.dispose();
   }
 
   @override
@@ -93,7 +119,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   username,
                   style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 20),
+                // Add the large banner ad here
+                if (_largeBannerAd != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: SizedBox(
+                      height: _largeBannerAd!.size.height.toDouble(),
+                      width: _largeBannerAd!.size.width.toDouble(),
+                      child: AdWidget(ad: _largeBannerAd!),
+                    ),
+                  )
+                else
+                  const SizedBox(height: 270),
+                const SizedBox(height: 50), // Provide space if ad is not loaded
                 SizedBox(
                   height: 50,
                   child: ElevatedButton(

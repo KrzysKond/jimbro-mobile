@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jimbro_mobile/models/group.dart';
 import 'package:jimbro_mobile/routes.dart';
 import 'package:jimbro_mobile/screens/profile/profile_screen.dart';
+import '../../ads/banner.dart';
 import '../../service/api_group_service.dart';
 import 'package:jimbro_mobile/screens/groups/groupchat_screen.dart';
 
@@ -14,16 +16,31 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> {
   late Future<List<Group>> _groupsFuture;
+  late BannerAdManager _bannerAdManager;
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
+    _bannerAdManager = BannerAdManager();
     _fetchGroups();
+    _loadBannerAd();
   }
 
   Future<void> _fetchGroups() async {
     setState(() {
       _groupsFuture = ApiGroupService().fetchUserGroups();
+    });
+  }
+
+  void _loadBannerAd() {
+    _bannerAdManager.loadSmallBannerAd(() {
+      setState(() {
+        _bannerAd = _bannerAdManager.smallBannerAd;
+        print("Banner Ad loaded successfully.");
+      });
+    }, (error) {
+      print("Failed to load banner ad: ${error.message}");
     });
   }
 
@@ -39,6 +56,12 @@ class _GroupScreenState extends State<GroupScreen> {
         content: Text('Failed to leave ${group.name}: $e'),
       ));
     }
+  }
+
+  @override
+  void dispose() {
+    _bannerAdManager.dispose(); // Dispose of the BannerAdManager
+    super.dispose();
   }
 
   @override
@@ -210,7 +233,15 @@ class _GroupScreenState extends State<GroupScreen> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            if (_bannerAd != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: SizedBox(
+                  height: _bannerAd!.size.height.toDouble(),
+                  width: _bannerAd!.size.width.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
+              ),
           ],
         ),
       ),
