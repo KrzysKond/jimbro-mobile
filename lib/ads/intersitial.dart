@@ -5,7 +5,7 @@ class InterstitialAdManager {
 
   void loadInterstitialAd(Function onAdLoaded, Function onAdFailedToLoad) {
     InterstitialAd.load(
-      adUnitId: '#',
+      adUnitId: 'ca-app-pub-1385022987690228/6909268756',
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
