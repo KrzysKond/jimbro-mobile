@@ -7,7 +7,7 @@ class BannerAdManager {
 
   void loadBannerAd(Function onAdLoaded, Function onAdFailedToLoad) {
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-1385022987690228/6918333034',
+      adUnitId: '#',
       request: const AdRequest(),
       size: AdSize.largeBanner,
       listener: BannerAdListener(
@@ -24,7 +24,7 @@ class BannerAdManager {
 
   void loadLargeBannerAd(Function onAdLoaded, Function onAdFailedToLoad) {
     _largeBannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-1385022987690228/6918333034',
+      adUnitId: '#',
       request: const AdRequest(),
       size: AdSize.mediumRectangle,
       listener: BannerAdListener(
@@ -41,7 +41,7 @@ class BannerAdManager {
 
   void loadSmallBannerAd(Function onAdLoaded, Function onAdFailedToLoad) {
     _smallBannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-1385022987690228/6918333034',
+      adUnitId: '#',
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
