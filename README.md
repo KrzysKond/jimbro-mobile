@@ -1,16 +1,6 @@
-# jimbro_mobile
+# Jimbro
 
-A new Flutter project.
+Flutter-made social app which allows users to share their workouts. Friends can gather in groups and share photos of their gym sessions, like posts and leave comments! Additionally there are functionalities of notifications and groupchats!
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#Server side:
+https://github.com/KrzysKond/jimbro
